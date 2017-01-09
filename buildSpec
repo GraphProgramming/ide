@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ "Python" = $1 ]; then
+  cd ../pyGP
+
+  python buildNodespec.py $@
+elif [ "Lua" = $1 ]; then
+  cd ../luaGP
+
+  luajit buildNodespec.lua $@
+else
+  echo "Unknown language."
+fi

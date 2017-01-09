@@ -1,0 +1,186 @@
+body {
+        background-color: rgba(100, 100, 100, 0.5);
+        height: 100%;
+        margin: 0;
+    }
+.content-div {
+}
+
+h2 {
+  padding-left: 0.3em;
+}
+
+    .rightSide {
+        background-color: white;
+        position: absolute;
+        overflow:auto;
+        top:4em;;
+        bottom:0;
+        right:0;
+        width: 18em;
+        z-index: -1;
+    }
+    .tab {
+        margin-top: 1em;
+        padding: 1em;
+        background-color: rgba(240, 240, 240, 1.0);
+        padding-bottom: 4em;
+    }
+    .right {
+        float: right;
+        margin-right: 1em;
+    }
+    .info {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+    .debug {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+    .graphview {
+        background-color: white;
+        position: absolute;
+        top:4em;;
+        bottom:0;
+        left:0;
+        right:0;
+    }
+    .overlay {
+        position: absolute;
+        top:0em;
+        bottom:0;
+        left:0;
+        right:0;
+        padding-left:2em;
+        padding-right:2em;
+        padding-top:2em;
+        padding-bottom:2em;
+        z-index: 10000;
+        background-color: rgba(100, 100, 100, 0.5)
+    }
+    .inneroverlay {
+        position: absolute;
+        top: 0;
+        bottom:0;
+        left: 0;
+        right: 0;
+        overflow:auto;
+        margin-left:2em;
+        margin-right:2em;
+        margin-top:2em;
+        margin-bottom:2em;
+        z-index: 101;
+        background-color: rgba(255, 255, 255, 1.0)
+    }
+    .node {
+        color: white;
+        padding: 0.8em;
+        width: 12em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left:0.5em;
+        margin-bottom:0.4em;
+        border: 0px;
+    }
+    .button {
+        color: white;
+        padding: 0.2em;
+        width: 6em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin:0.1em;
+        border: 0px;
+    }
+    .button-lg {
+        color: white;
+        padding: 1em;
+        width:100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top:0.2em;
+        border: 0px;
+    }
+    .newnode {
+        background-color: violet;
+    }
+    .inputnode {
+        background-color: #3CB371;
+    }
+    .algorithmnode {
+        background-color: orange;
+    }
+    .structurenode{
+        background-color: darkslategray;
+    }
+    .debugnode{
+        background-color: violet;
+    }
+    .outputnode {
+        background-color: indianred;
+    }
+    .languagenode {
+        background-color: orange;
+    }
+    .buttonlight {
+        background-color: rgba(200,200,200,0.7);
+        color: #333333;
+        display: none;
+    }
+    .buttonlight:hover {
+        text-decoration: none;
+        color: #333333;
+        background-color: rgba(250,250,250,0.8);
+        display: none;
+    }
+    .buttondark {
+        background-color: rgba(100,100,100,0.7);
+        color: white;
+    }
+    .buttondark:hover {
+        text-decoration: none;
+        background-color: rgba(50,50,50,0.8);
+        color: white;
+    }
+    .buttondev {
+        background-color: violet;
+        color: white;
+    }
+    .buttondev:hover {
+        text-decoration: none;
+        background-color: darkviolet;
+        color: white;
+    }
+    .pinput {
+        background-color: rgba(240, 240, 240, 1.0);
+        border-width: 0px; 
+        border-bottom-width: 2px;
+        border-color: orange;
+        border-style: solid;
+        width: 100%;
+        padding-top: 0.4em;
+    }
+    .hinput {
+        background-color: rgba(240, 240, 240, 1.0);
+        border-width: 0px; 
+        border-bottom-width: 2px;
+        border-color: orange;
+        border-style: solid;
+        width: 100%;
+        padding-top: 0.4em;
+    }
+    .src {
+        background-color: rgba(240, 240, 240, 1.0);
+        border-width: 1px; 
+        border-color: orange;
+        border-style: solid;
+        width: 100%;
+        min-height: 80%;
+        padding-top: 0.4em;
+    }
+    .CodeMirror {
+        height: 82%;
+    }
