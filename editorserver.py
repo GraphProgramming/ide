@@ -248,7 +248,7 @@ class myHandler(BaseHTTPRequestHandler):
                     preex = os.setsid
                 except AttributeError:
                     print("Windows: Feature not availible.")
-                cmd = ["../luaGP/graphex ../grapheditor/" + cmd + " debug"]
+                cmd = ["../luaGP/graphex ../GPWebUI/" + cmd + " debug"]
             else:
                 try:
                     preex = os.setsid
