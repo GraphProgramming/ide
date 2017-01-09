@@ -510,10 +510,12 @@ return myNode
         nodeCode = document.getElementById("nodeCode").value;
         src = document.getElementById("src").value;
         var fileending = ".py";
+	var packageName = "pyGP";
         if (that.currentLanguage == "Lua") {
           fileending = ".lua";
+	  packageName = "luaGP";
         }
-        setSrc(that.currentLanguage.toLowerCase() + "/" + nodeCode + fileending, src, that.printError);
+        setSrc(packageName + "/" + nodeCode + fileending, src, that.printError);
         WebUI.hideCodeEditor();
     }
     
@@ -541,10 +543,12 @@ return myNode
     function showCode(src) {
         var srcEdit = "<textarea id='src' class='src'>" + src + "</textarea>";
         var fileending = ".py";
+	var packageName = "pyGP";
         if (that.currentLanguage == "Lua") {
             fileending = ".lua";
+	    packageName = "luaGP";
         }
-        var savebtn = "<button class='node inputnode right' onclick='WebUI.saveCodePeek(\"" + that.currentLanguage.toLowerCase() + "/" + that.currentNode.code + fileending + "\")'>Save</button>";
+        var savebtn = "<button class='node inputnode right' onclick='WebUI.saveCodePeek(\"" + packageName + "/" + that.currentNode.code + fileending + "\")'>Save</button>";
         if (localStorage.devmode != "true") {
             savebtn = "";
         }
@@ -560,10 +564,12 @@ return myNode
     
     this.codePeek = function(property) {
         var fileending = ".py";
+	var packageName = "pyGP";
         if (that.currentLanguage == "Lua") {
-            fileending = ".lua"
+            fileending = ".lua";
+	    packageName = "luaGP";
         }
-        var code = that.currentLanguage.toLowerCase() + "." + property + fileending;
+        var code = packageName + "." + property + fileending;
         showCode("Downloading code: " + code);
         getSrc(code, showCode, that.printError);
     }
