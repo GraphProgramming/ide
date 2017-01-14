@@ -244,7 +244,6 @@ function WebUI_CWebUI() {
         that.currentLanguage = language;
         localStorage.currentLanguage = language;
         document.getElementById("current_language").innerHTML = language;
-        that.hideLanguageSelector();
         getNodes(language, that.setNodes, WebUI.printError);
     };
     this.hideLanguageSelector = function() {
@@ -478,7 +477,7 @@ def spec(node):
    node["name"] = "MyNode"
    node["desc"] = "Does stuff"
 `;
-        if (that.currentLanguage == "Lua") {
+        if (that.currentLanguage == "luaGP") {
           sampleSrc = `local myNode = {}
 function myNode.init(node)
   node.tick = function(value)
@@ -511,7 +510,7 @@ return myNode
         src = document.getElementById("src").value;
         var fileending = ".py";
 	var packageName = "pyGP";
-        if (that.currentLanguage == "Lua") {
+        if (that.currentLanguage == "luaGP") {
           fileending = ".lua";
 	  packageName = "luaGP";
         }
@@ -544,7 +543,7 @@ return myNode
         var srcEdit = "<textarea id='src' class='src'>" + src + "</textarea>";
         var fileending = ".py";
 	var packageName = "pyGP";
-        if (that.currentLanguage == "Lua") {
+        if (that.currentLanguage == "luaGP") {
             fileending = ".lua";
 	    packageName = "luaGP";
         }
@@ -565,7 +564,7 @@ return myNode
     this.codePeek = function(property) {
         var fileending = ".py";
 	var packageName = "pyGP";
-        if (that.currentLanguage == "Lua") {
+        if (that.currentLanguage == "luaGP") {
             fileending = ".lua";
 	    packageName = "luaGP";
         }

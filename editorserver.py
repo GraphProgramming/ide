@@ -243,7 +243,7 @@ class myHandler(BaseHTTPRequestHandler):
                 return
             cmd = "data/" + data["startGraph"] + ".graph.json"
             preex = None
-            if "execEnv" in data and data["execEnv"] == "Lua":
+            if "execEnv" in data and data["execEnv"] == "luaGP":
                 try:
                     preex = os.setsid
                 except AttributeError:

@@ -20,13 +20,9 @@
         localStorage.theme = theme;
         if (theme == "dark") {
           document.getElementById('navbar-container').className += " navbar-inverse";
-          document.getElementById('dark_btn').style.display = "none";
-          document.getElementById('light_btn').style.display = "";
         }
         if (theme == "light") {
           document.getElementById("navbar-container").className = document.getElementById("navbar-container").className.replace( /(?:^|\s)navbar-inverse(?!\S)/g , '' );
-          document.getElementById('light_btn').style.display = "none";
-          document.getElementById('dark_btn').style.display = "";
         }
     }
     function initialize() {
@@ -73,14 +69,29 @@
                <li><a id="save_btn" onclick="WebUI.saveBtn();">SAVE</a></li>
              </ul>
            </li>
-           <li><a id="startbtn" class='algorithmnode' onclick='WebUI.startDebug()'>RUN (<span id="current_language">Python</span>)</a></li>
+           <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Theme<span class="caret"></span></a>
+             <ul class="dropdown-menu">
+               <li><a id="dark_btn" onclick="swapTheme('dark');">Dark</a></li>
+               <li><a id="light_btn" onclick="swapTheme('light');">Light</a></li>
+             </ul>
+           </li>
+           <li class="dropdown">
+		   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language: <span id="current_language">Julia</span><span class="caret"></span></a>
+             <ul class="dropdown-menu">
+               <li><a id="julia_btn" onclick="WebUI.changeLanguage('juliaGP');">Julia (WIP)</a></li>
+               <li><a id="python_btn" onclick="WebUI.changeLanguage('pyGP');">Python</a></li>
+               <li><a id="lua_btn" onclick="WebUI.changeLanguage('luaGP');">Lua</a></li>
+               <li><a id="javascript_btn" onclick="WebUI.changeLanguage('jsGP');">JavaScript</a></li>
+               <li><a id="java_btn" onclick="WebUI.changeLanguage('jGP');">Java</a></li>
+               <li><a id="cpp_btn" onclick="WebUI.changeLanguage('cppGP');">C++</a></li>
+               <li><a id="dev_btn" onclick="toggleDev();">Toggle Dev Mode</a></li>
+             </ul>
+           </li>
+           <li><a id="startbtn" class='inputnode' onclick='WebUI.startDebug()'>RUN</a></li>
            <li><a id="deploybtn" class='inputnode' style="display:none" onclick='WebUI.startDebug()'>DEPLOY</a></li>
            <li><a id="restartbtn" class='algorithmnode' style="display:none" onclick='WebUI.restartDebug()'>RESTART</a></li>
            <li><a id="killbtn" class='outputnode' style="display:none" onclick='WebUI.killDebug()'>KILL</a></li>
-           <li><a id="language_btn" class="structurenode" onclick="WebUI.languageBtn();">LANGUAGE</a></li>
-           <li><a id="light_btn" class="buttonlight" onclick="swapTheme('light');">Switch Theme (light)</a></li>
-           <li><a id="dark_btn"  class="buttondark" onclick="swapTheme('dark');">Switch Theme (dark)</a></li>
-           <li><a id="dev_btn" class="buttondev" onclick="toggleDev();">DEV MODE</a></li>
          </ul>
        </div>
      </div>
