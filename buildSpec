@@ -9,5 +9,5 @@ elif [ "luaGP" = $1 ]; then
 
   luajit buildNodespec.lua $@
 else
-  echo "Unknown language."
+  echo "Unknown language: " $@
 fi

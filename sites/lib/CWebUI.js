@@ -19,7 +19,7 @@ function WebUI_CWebUI() {
 	this.graph = null;
     this.graphStack = new Array();
     this.graphNameStack = new Array();
-    this.currentLanguage = "Python";
+    this.currentLanguage = "pyGP";
 	this.nodes = null;
 	this.selectedNode = null;
 	this.graphName = "Default";
