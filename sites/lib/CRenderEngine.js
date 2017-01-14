@@ -701,12 +701,12 @@ function WebUI_CRenderEngine() {
 	}
 
 	function renderActionButtons() {
-		renderButton("NEW", 30, 25, colorAlgorithmNode);
+		renderButton("NEW", 30, 25, colorInputNode);
 		renderButton("DEL", 30, 65, colorOutputNode);
 		if (WebUI.isConMode()) {
-			renderButton("EDIT", 30, 105, colorOutputNode);
+			renderButton("EDIT", 30, 105, colorAlgorithmNode);
 		} else {
-			renderButton("EDIT", 30, 105, colorInputNode);
+			renderButton("EDIT", 30, 105, colorStructureNode);
 		}
         
 		renderButton("-", canvas.width - 30, 25, colorStructureNode);
