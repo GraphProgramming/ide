@@ -393,6 +393,30 @@ function WebUI_CRenderEngine() {
         }
 	}
 
+	function renderNodeDebugString(node, foregroundColor, fillStyle) { 
+	    var paneWidth = that.nodeWidth * 1.5;
+	    var paneHeight = that.nodeHeight * 1.5;
+	    var x = node.x + that.nodeWidth / 2 + paneWidth / 2;
+	    var y = node.y - that.nodeHeight / 2 + paneHeight / 2;
+	    var marked = node == that.marked;
+
+            ctx.beginPath();
+            ctx.fillStyle = fillStyle;
+            ctx.rect(renderOffsetX * scale + x * scale + width/2-paneWidth/2 * scale,renderOffsetY * scale + y * scale + height/2-paneHeight/2 * scale,paneWidth * scale,paneHeight * scale);
+	    ctx.fill();
+            if (!marked) {
+		  ctx.lineWidth="0";
+		  ctx.strokeStyle=fillStyle;
+            } else {
+		  ctx.lineWidth="5";
+		  ctx.strokeStyle=colorMarked;
+		  ctx.stroke();
+            }
+
+            var data = node.data;
+            renderNodeText(data, x, y-8, 0, 0, foregroundColor, 18);
+	}
+
 	function renderNodeDebugArray(node, foregroundColor, fillStyle) {
 	    var paneWidth = that.nodeWidth * 2;
 	    var paneHeight = that.nodeWidth * 1.5;
@@ -400,26 +424,26 @@ function WebUI_CRenderEngine() {
 	    var y = node.y - that.nodeHeight / 2 + paneHeight / 2;
 	    var marked = node == that.marked;
 
-		ctx.beginPath();
-		ctx.fillStyle = fillStyle;
-		ctx.rect(renderOffsetX * scale + x * scale + width/2-paneWidth/2 * scale,renderOffsetY * scale + y * scale + height/2-paneHeight/2 * scale,paneWidth * scale,paneHeight * scale);
-		ctx.fill();
-        if (!marked) {
+            ctx.beginPath();
+            ctx.fillStyle = fillStyle;
+            ctx.rect(renderOffsetX * scale + x * scale + width/2-paneWidth/2 * scale,renderOffsetY * scale + y * scale + height/2-paneHeight/2 * scale,paneWidth * scale,paneHeight * scale);
+	    ctx.fill();
+            if (!marked) {
 		  ctx.lineWidth="0";
 		  ctx.strokeStyle=fillStyle;
-        } else {
+            } else {
 		  ctx.lineWidth="5";
 		  ctx.strokeStyle=colorMarked;
 		  ctx.stroke();
-        }
+            }
 
-        var data = node.data;
-        var len = data.length;
+            var data = node.data;
+            var len = data.length;
 
-        var max_x = 0;
-        var max_y = 0;
-        var xs = 1;
-        var ys = 1;
+            var max_x = 0;
+            var max_y = 0;
+            var xs = 1;
+            var ys = 1;
         if (Object.prototype.toString.call( data[0] ) === '[object Array]') {
             if (Object.prototype.toString.call( data[0][0] ) === '[object Array]') {
                 polygon = true;
@@ -630,21 +654,26 @@ function WebUI_CRenderEngine() {
 		    }
 		    else if( node.data  == 'image' ) {
 		        var image = null;
-                    if (node.data_img && node.data_img != null && Object.prototype.toString.call( node.data_img ) === '[object HTMLImageElement]') {
-                        image = node.data_img;
-                    } else {
-                        image = new Image()
-                    }
-                    image.src = 'data:image/png;base64,' + node.data_str;
-                    node.data_img = image;
+                        if (node.data_img && node.data_img != null && Object.prototype.toString.call( node.data_img ) === '[object HTMLImageElement]') {
+                            image = node.data_img;
+                        } else {
+                            image = new Image()
+                        }
+                        image.src = 'data:image/png;base64,' + node.data_str;
+                        node.data_img = image;
 		        renderNodeDebugImage(node, foregroundColor, colorConnector);
+		    } else if (Object.prototype.toString.call( node.data ) === '[object Number]') {
+			renderNodeDebugString(node, foregroundColor,colorConnector); 
+		    } else if (Object.prototype.toString.call( node.data ) === '[object String]') {
+			renderNodeDebugString(node, foregroundColor,colorConnector);
 		    } else {
-		        console.log(Object.prototype.toString.call( node.data ));
+		        node.data = "Unsupported Type: " + Object.prototype.toString.call( node.data );
+			renderNodeDebugString(node, foregroundColor, colorConnector);
 		    }
 		}
 
 		/* Write text with speed and curve info */
-        var nname = node.displayname;
+                var nname = node.displayname;
 		if (typeof node.desc === "undefined") {
 			node.desc = {};
 		}

@@ -832,6 +832,8 @@ return myNode
         }
         lastDebug = result;
         showInfo();
+        result = result.replace(new RegExp("<", 'g'), "&lt;");
+        result = result.replace(new RegExp(">", 'g'), "&gt;");
         result = result.replace(new RegExp("\n", 'g'), "<br>");
         document.getElementById("debugcontent").innerHTML = "<button class='button outputnode right' onclick='WebUI.clearDebug()'>CLEAR</button><br>" + result;
     }
