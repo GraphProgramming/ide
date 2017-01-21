@@ -4,6 +4,9 @@
 SCRIPT=$(readlink -f $0)
 # Absolute path this script is in. /home/user/bin
 SCRIPTPATH=`dirname $SCRIPT`
+if [ -d "/opt/ros/kinetic" ] ; then
+    source /opt/ros/kinetic/setup.bash
+fi
 
 cd $SCRIPTPATH/electron
 npm start
