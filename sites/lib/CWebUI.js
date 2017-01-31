@@ -474,8 +474,8 @@ function WebUI_CWebUI() {
     node["tick"] = tick
 
 def spec(node):
-   node["name"] = "MyNode"
-   node["desc"] = "Does stuff"
+    node["name"] = "MyNode"
+    node["desc"] = "Does stuff"
 `;
         if (that.currentLanguage == "luaGP") {
           sampleSrc = `local myNode = {}
