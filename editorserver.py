@@ -252,7 +252,7 @@ class myHandler(BaseHTTPRequestHandler):
             else:
                 try:
                     preex = os.setsid
-                    cmd = ["python ../pyGP/graphex.py " + cmd + " debug"]
+                    cmd = ["../pyGP/graphex " + cmd + " debug"]
                 except AttributeError:
                     print("Windows: Feature not availible.")
                     cmd = ["python2", "../pyGP/graphex.py ", cmd, "debug"]
