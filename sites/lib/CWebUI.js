@@ -631,8 +631,13 @@ return myNode
 			var pos = RenderEngine.getNodeOutputPosition(that.graph, that.selectedNode.name, that.selectedOutputConnection);
 			RenderEngine.tmpNodeLine(pos.x, pos.y, x / scale, y / scale);
 		} else if (that.selectedNode != null) {
-			that.selectedNode.x = x / scale + moveOffsetX / scale;
-			that.selectedNode.y = y / scale + moveOffsetY / scale;
+			var tx = x / scale + moveOffsetX / scale;
+			var ty = y / scale + moveOffsetY / scale;
+			if (moved == false && Math.abs(tx - that.selectedNode.x) < 20 && Math.abs(ty - that.selectedNode.y) < 20) {
+			    return;
+			}
+			that.selectedNode.x = tx;
+			that.selectedNode.y = ty;
             moved = true;
             RenderEngine.setDirty();
 		} else if (that.startPos != null) {
