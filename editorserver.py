@@ -87,7 +87,7 @@ def debugger():
                 print("Connection closed")
                 break
             if DEBUG_WS is not None:
-                #print(line)
+                print(line)
                 DEBUG_WS.sendMessage(line, False)
         except:
             print("Closed with error.")
@@ -114,15 +114,16 @@ class MyServerProtocol(WebSocketServerProtocol):
                 if payload == DEBUG_KEY:
                     DEBUG_WS = self
                 else:
-                    self.closedByMe()
+                    self.closedByMe = True
             else:
                 DEBUG_SOCK.send(payload)
 
     def onClose(self, wasClean, code, reason):
         global DEBUG_WS
+        if DEBUG_SOCK is not None:
+            DEBUG_SOCK.close()
         if DEBUG_WS is self:
             DEBUG_WS = None
-        DEBUG_SOCK.close()
         print("WebSocket connection closed: {}".format(reason))
 
 
@@ -255,7 +256,7 @@ class myHandler(BaseHTTPRequestHandler):
                     cmd = ["../pyGP/graphex " + cmd + " debug"]
                 except AttributeError:
                     print("Windows: Feature not availible.")
-                    cmd = ["python2", "../pyGP/graphex.py ", cmd, "debug"]
+                    cmd = ["python", "../pyGP/graphex.py ", cmd, "debug"]
             execProcess = subprocess.Popen(
                 cmd,
                  stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -304,11 +305,11 @@ class myHandler(BaseHTTPRequestHandler):
             subprocess.call(["bash", "buildSpec", data["getnodes"]])
             path = "data/" + data["getnodes"] + ".nodes.json"
         if "getsrc" in data:
-            node = data["getsrc"].decode("utf-8").replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
+            node = data["getsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
             path = "../" + node
             print(path)
         if "setsrc" in data:
-            node = data["setsrc"].decode("utf-8").replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
+            node = data["setsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
             path = "../" + node
             print(os.path.dirname(path))
             if not os.path.exists(os.path.dirname(path)):
