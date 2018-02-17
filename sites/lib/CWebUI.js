@@ -11,6 +11,7 @@ function WebUI_CWebUI() {
     var codeTheme = "default";
     var promptCallback = null;
     var conMode = true;
+    var gridSize = 10;
     this.debugger = null;
     this.currentNode = null;
 	this.keyboard_input_state = true;
@@ -286,14 +287,14 @@ function WebUI_CWebUI() {
 				RenderEngine.changeScale(0.2);
 				return;
 			}
-            if (absY > RenderEngine.getSize().height / 2 - 15 && absY < RenderEngine.getSize().height / 2 + 15) {
+            /*if (absY > RenderEngine.getSize().height / 2 - 15 && absY < RenderEngine.getSize().height / 2 + 15) {
                 if (RenderEngine.showInfo) {
                     showInfo();
                 } else {
                     hideInfo();
                 }
                 return;
-            }
+            }*/
         }
 		if (absX > 10 && absX < 50) {
 			//if (absY > 10 && absY < 40) {
@@ -417,7 +418,7 @@ function WebUI_CWebUI() {
 				if (output != null) {
 					that.selectedNode = node;
 					that.selectedOutputConnection = output;
-					updateGraph(null, that.selectedNode, null, that.selectedOutputConnection);
+					//updateGraph(null, that.selectedNode, null, that.selectedOutputConnection);
 					return;
 				}
 			}
@@ -636,8 +637,8 @@ return myNode
 			if (moved == false && Math.abs(tx - that.selectedNode.x) < 20 && Math.abs(ty - that.selectedNode.y) < 20) {
 			    return;
 			}
-			that.selectedNode.x = tx;
-			that.selectedNode.y = ty;
+			that.selectedNode.x = (tx / gridSize).toFixed() * gridSize;
+			that.selectedNode.y = (ty / gridSize).toFixed() * gridSize;
             moved = true;
             RenderEngine.setDirty();
 		} else if (that.startPos != null) {
@@ -664,7 +665,9 @@ return myNode
 					return;
 				}
 			});
-			updateGraph(that.selectedNode, outputNode, that.selectedInputConnection, outputName);
+            if (outputNode != null) {
+                updateGraph(that.selectedNode, outputNode, that.selectedInputConnection, outputName);
+            }
 			RenderEngine.removeTmpNodeLine();
 			that.selectedInputConnection = null;
 			that.selectedNode = null;
@@ -680,8 +683,10 @@ return myNode
 					inputNode = node;
 					return;
 				}
-			});
-			updateGraph(inputNode, that.selectedNode, inputName, that.selectedOutputConnection);
+            });
+            if (inputNode != null) {
+                updateGraph(inputNode, that.selectedNode, inputName, that.selectedOutputConnection);
+            }
 			RenderEngine.removeTmpNodeLine();
 			that.selectedOutputConnection = null;
 			that.selectedNode = null;
@@ -745,8 +750,11 @@ return myNode
                 showInfo();
                 RenderEngine.setDirty();
 			} else {
-			    that.selectedNode.x = x / scale + moveOffsetX / scale;
-		    	that.selectedNode.y = y / scale + moveOffsetY / scale;
+			    tx = x / scale + moveOffsetX / scale;
+                ty = y / scale + moveOffsetY / scale;
+                
+			    that.selectedNode.x = (tx / gridSize).toFixed() * gridSize;
+			    that.selectedNode.y = (ty / gridSize).toFixed() * gridSize;
                 RenderEngine.setDirty();
 
 			    if (absX > 10 && absX < 50 && absY > 50 && absY < 80) {
@@ -794,12 +802,14 @@ return myNode
 					toRemove.push(connection);
 				}
 			}
-		});
-		graph.connections.forEach(function(connection) {
-			if (outputNode != null && connection.input.node == outputNode.name && connection.input.output == outputName) {
-				toRemove.push(connection);
-			}
-		});
+        });
+        if (inputNode == null) {
+		    graph.connections.forEach(function(connection) {
+			    if (outputNode != null && connection.input.node == outputNode.name && connection.input.output == outputName) {
+				    toRemove.push(connection);
+			    }
+            });
+        }
 		toRemove.forEach(function(elem) {
 			var index = graph.connections.indexOf(elem);
     		graph.connections.splice(index, 1);
@@ -814,7 +824,12 @@ return myNode
     function showInfo() {
         if (RenderEngine.showInfo == true) {
             RenderEngine.showInfo = false;
-            document.getElementById("graphview").style.right = "18em";
+            var offset_px = (parseFloat(getComputedStyle(document.getElementById("graphview")).fontSize) * 18);
+            var percent_screen_px = window.innerWidth * 0.3;
+            document.getElementById("graphview").style.right = Math.max(offset_px, percent_screen_px) + "px";
+            document.getElementById("rightside").style.width = Math.max(offset_px, percent_screen_px) + "px";
+            document.getElementById("hider").style.zIndex = 100;
+            document.getElementById("expander").style.zIndex = -100;
             RenderEngine.resize();
         }
     }
@@ -824,6 +839,8 @@ return myNode
             RenderEngine.showInfo = true;
             document.getElementById("graphview").style.right = "0";
             document.getElementById("infocontent").innerHTML = "Click/Tap on a node to show info about it.";
+            document.getElementById("hider").style.zIndex = -100;
+            document.getElementById("expander").style.zIndex = 100;
             that.currentNode = null;
             RenderEngine.marked = null;
             RenderEngine.resize();
@@ -831,6 +848,10 @@ return myNode
     }
     
     var lastDebug = "";
+
+    this.hideInfo = hideInfo;
+    this.showInfo = showInfo;
+
     this.setDebug = function (result) {
         if (lastDebug == result) {
             return;
