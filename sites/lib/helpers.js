@@ -183,7 +183,7 @@ function update(graph, callback, callbackFailure, callbackError) {
     }
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            update(graph, callback, callbackFailure, callbackError);
+            setTimeout(function() { update(graph, callback, callbackFailure, callbackError); }, 200);
             if (callback != null) {
                 callback(xmlhttp.responseText);
             }

@@ -20,6 +20,36 @@ h2 {
         width: 18em;
         z-index: -1;
     }
+    .expander {
+        text-align: center;
+        vertical-align: middle;
+        background-color: rgba(200, 200, 200, 1.0);
+        position: absolute;
+        padding-top:2.3%;
+        top:45%;
+        bottom:45%;
+        right:0;
+        width: 3em;
+        z-index: 100;
+    }
+    .expander:hover {
+        background-color: #3CB371;
+    }
+    .hider {
+        text-align: center;
+        vertical-align: middle;
+        background-color: rgba(200, 200, 200, 1.0);
+        position: absolute;
+        padding-top:2.3%;
+        top:45%;
+        bottom:45%;
+        right:0;
+        width: 3em;
+        z-index: -100;
+    }
+    .hider:hover {
+        background-color: indianred;
+    }
     .tab {
         margin-top: 1em;
         padding: 1em;

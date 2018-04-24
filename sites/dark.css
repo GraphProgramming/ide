@@ -21,6 +21,36 @@ h2 {
         width: 18em;
         z-index: -1;
     }
+    .expander {
+        text-align: center;
+        vertical-align: middle;
+        background-color: #222222;
+        position: absolute;
+        padding-top:2.3%;
+        top:45%;
+        bottom:45%;
+        right:0;
+        width: 3em;
+        z-index: 100;
+    }
+    .expander:hover {
+        background-color: green;
+    }
+    .hider {
+        text-align: center;
+        vertical-align: middle;
+        background-color: #222222;
+        position: absolute;
+        padding-top:2.3%;
+        top:45%;
+        bottom:45%;
+        right:0;
+        width: 3em;
+        z-index: -100;
+    }
+    .hider:hover {
+        background-color: #AB0000;
+    }
     .tab {
         margin-top: 1em;
         padding: 1em;
@@ -109,25 +139,46 @@ h2 {
         border: 0px;
     }
     .newnode {
-        background-color: darkviolet;
+        background-color: #9400d3;
+    }
+    .newnode:hover {
+        background-color: #a600ed;
     }
     .inputnode {
         background-color: green;
     }
+    .inputnode:hover {
+        background-color: #009a00;
+    }
     .algorithmnode {
         background-color: #D75813;
     }
+    .algorithmnode:hover {
+        background-color: #eb6319;
+    }
     .structurenode{
-        background-color: darkslategray;
+        background-color: #2f4f4f;
+    }
+    .structurenode:hover{
+        background-color: #395f5f;
     }
     .debugnode{
-        background-color: darkviolet;
+        background-color: #9400d3;
+    }
+    .debugnode:hover {
+        background-color: #a600ed;
     }
     .outputnode {
         background-color: #AB0000;
     }
+    .outputnode:hover {
+        background-color: #C50000;
+    }
     .languagenode {
         background-color: #D75813;
+    }
+    .languagenode:hover {
+        background-color: #eb6319;
     }
     .buttonlight {
         background-color: rgba(200,200,200,0.7);

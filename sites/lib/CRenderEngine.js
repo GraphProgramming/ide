@@ -741,11 +741,11 @@ function WebUI_CRenderEngine() {
 		renderButton("-", canvas.width - 30, 25, colorStructureNode);
 		renderButton("+", canvas.width - 30, 65, colorStructureNode);
         
-        if (that.showInfo) {
+        /*if (that.showInfo) {
 		  renderButton("<", canvas.width - 30, canvas.height / 2, colorInputNode);
         } else {
 		  renderButton(">", canvas.width - 30, canvas.height / 2, colorOutputNode);
-        }
+        }*/
         
         if (hasParent) {
             renderButton("BACK", 30, 385, "dimgray");
