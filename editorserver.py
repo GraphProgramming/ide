@@ -301,7 +301,10 @@ class myHandler(BaseHTTPRequestHandler):
             self.wfile.write("".encode("utf-8"))
             return
         if "getnodes" in data:
-            subprocess.call(["bash", "buildSpec", data["getnodes"]])
+            try:
+                subprocess.call(["bash", "buildSpec", data["getnodes"]])
+            except:
+                subprocess.call(["buildSpec.bat", data["getnodes"]])
             path = "data/" + data["getnodes"] + ".nodes.json"
         if "getsrc" in data:
             node = data["getsrc"].decode("utf-8").replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
