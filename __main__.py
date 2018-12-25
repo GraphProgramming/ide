@@ -20,6 +20,8 @@ import time
 from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory
 from twisted.internet import reactor
 import json
+
+from gpm.__main__ import GPM_HOME, get_path
 # or: from autobahn.asyncio.websocket import WebSocketServerProtocol
 
 PORT_NUMBER = 8088
@@ -219,11 +221,7 @@ class myHandler(BaseHTTPRequestHandler):
         global result
         if "listGraphs" in data:
             graphs = []
-            for root, dirs, files in os.walk(u'data'):
-                for f in files:
-                    if f.endswith('.graph.json'):
-                        graphs.append(os.path.join(root, f))
-            for root, dirs, files in os.walk(u'data/private'):
+            for root, dirs, files in os.walk(u'.'):
                 for f in files:
                     if f.endswith('.graph.json'):
                         graphs.append(os.path.join(root, f))
@@ -242,21 +240,21 @@ class myHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write("Canot start 2 processes.".encode("utf-8"))
                 return
-            cmd = "data/" + data["startGraph"] + ".graph.json"
+            cmd = data["startGraph"] + ".graph.json"
             preex = None
             if "execEnv" in data and data["execEnv"] == "luaGP":
                 try:
                     preex = os.setsid
                 except AttributeError:
                     print("Windows: Feature not availible.")
-                cmd = ["../luaGP/graphex ../GPWebUI/" + cmd + " debug"]
+                cmd = [os.path.join(GPM_HOME, "luaGP", "graphex") + " " + cmd + " debug"]
             else:
                 try:
                     preex = os.setsid
-                    cmd = ["../pyGP/graphex " + cmd + " debug"]
+                    cmd = ["python -m gpm.pyGP " + cmd + " debug"]
                 except AttributeError:
                     print("Windows: Feature not availible.")
-                    cmd = ["python", "../pyGP/graphex.py ", cmd, "debug"]
+                    cmd = ["python", "-m gpm.pyGP", cmd, "debug"]
             execProcess = subprocess.Popen(
                 cmd,
                  stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -303,17 +301,17 @@ class myHandler(BaseHTTPRequestHandler):
             return
         if "getnodes" in data:
             try:
-                subprocess.call(["bash", "buildSpec", data["getnodes"]])
+                subprocess.call(["bash", GPM_HOME + "/GPWebUI/buildSpec", data["getnodes"]])
             except:
-                subprocess.call(["buildSpec.bat", data["getnodes"]])
-            path = "data/" + data["getnodes"] + ".nodes.json"
+                subprocess.call([GPM_HOME + "/GPWebUI/buildSpec.bat", data["getnodes"]])
+            path = data["getnodes"] + ".nodes.json"
         if "getsrc" in data:
             node = data["getsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
-            path = "../" + node
+            path = GPM_HOME + "/" + node
             print(path)
         if "setsrc" in data:
             node = data["setsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
-            path = "../" + node
+            path = GPM_HOME + "/" + node
             print(os.path.dirname(path))
             if not os.path.exists(os.path.dirname(path)):
                 try:
@@ -330,7 +328,7 @@ class myHandler(BaseHTTPRequestHandler):
             self.wfile.write("{'success':true}".encode("utf-8"))
             return
         if "getgraph" in data:
-            path = "data/" + data["getgraph"] + ".graph.json"
+            path = data["getgraph"] + ".graph.json"
         if path:
             try:
                 data = open(path, 'r').read()
@@ -347,7 +345,7 @@ class myHandler(BaseHTTPRequestHandler):
                 self.wfile.write("File not found!".encode("utf-8"))
                 return
         elif "setgraph" in data and "value" in data:
-            text_file = open("data/" + data["setgraph"] + ".graph.json", "w")
+            text_file = open(data["setgraph"] + ".graph.json", "w")
             text_file.write(data["value"])
             text_file.close()
             self.send_response(200)
