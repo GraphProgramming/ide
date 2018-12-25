@@ -254,11 +254,12 @@ class myHandler(BaseHTTPRequestHandler):
                     cmd = ["python -m gpm.pyGP " + cmd + " debug"]
                 except AttributeError:
                     print("Windows: Feature not availible.")
-                    cmd = ["python", "-m gpm.pyGP", cmd, "debug"]
+                    cmd = ["python", "-m", "gpm.pyGP", cmd, "debug"]
             execProcess = subprocess.Popen(
                 cmd,
                  stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                 shell=True, preexec_fn=preex)
+                 shell=True, preexec_fn=preex,
+                 env=os.environ)
             result = ""
             Thread(target=pollPipe).start()
             Thread(target=pollErrPipe).start()

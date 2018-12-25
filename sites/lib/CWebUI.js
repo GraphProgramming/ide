@@ -124,7 +124,7 @@ function WebUI_CWebUI() {
     this.openGraph = function(graphs) {
         var classes = {};
 		graphs.forEach(function(graph) {
-		    graph = graph.substring(5, graph.length - 11);
+		    graph = graph.substring(2, graph.length - 11);
             var nodetype = "outputnode";
             if (graph.lastIndexOf("private", 0) === 0) {
                 nodetype = "inputnode";
