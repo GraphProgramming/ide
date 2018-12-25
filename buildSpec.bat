@@ -9,7 +9,7 @@ goto other
 :pyGP
   cd ../pyGP
 
-  python buildNodespec.py %1
+  python -m gpm.pyGP.buildNodespec %1
 goto done
 
 :luaGP

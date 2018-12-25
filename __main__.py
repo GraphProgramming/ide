@@ -160,7 +160,7 @@ class myHandler(BaseHTTPRequestHandler):
             self.handleAPI(GET)
             return
 
-        path = "sites/" + path
+        path = GPM_HOME + "/GPWebUI/sites/" + path
         try:
             if path.endswith(".png"):
                 f=open(path, 'rb')

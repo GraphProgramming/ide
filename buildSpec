@@ -1,9 +1,7 @@
 #!/bin/bash
 
 if [ "pyGP" = $1 ]; then
-  cd ../pyGP
-
-  python buildNodespec.py $@
+  python -m gpm.pyGP.buildNodespec $@
 elif [ "luaGP" = $1 ]; then
   cd ../luaGP
 
