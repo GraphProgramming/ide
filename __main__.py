@@ -160,7 +160,7 @@ class myHandler(BaseHTTPRequestHandler):
             self.handleAPI(GET)
             return
 
-        path = GPM_HOME + "/GPWebUI/sites/" + path
+        path = GPM_HOME + "/ide/sites/" + path
         try:
             if path.endswith(".png"):
                 f=open(path, 'rb')
@@ -302,9 +302,9 @@ class myHandler(BaseHTTPRequestHandler):
             return
         if "getnodes" in data:
             try:
-                subprocess.call(["bash", GPM_HOME + "/GPWebUI/buildSpec", data["getnodes"]])
+                subprocess.call(["bash", GPM_HOME + "/ide/buildSpec", data["getnodes"]])
             except:
-                subprocess.call([GPM_HOME + "/GPWebUI/buildSpec.bat", data["getnodes"]])
+                subprocess.call([GPM_HOME + "/ide/buildSpec.bat", data["getnodes"]])
             path = data["getnodes"] + ".nodes.json"
         if "getsrc" in data:
             node = data["getsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")

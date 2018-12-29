@@ -7,6 +7,10 @@ body {
 .content-div {
 }
 
+.navbar-brand {
+    margin-bottom: 0px;
+}
+
 h2 {
   padding-left: 0.3em;
 }
@@ -15,7 +19,7 @@ h2 {
         background-color: #333333;
         position: absolute;
         overflow:auto;
-        top:4em;
+        top: 3.5em;
         bottom:0;
         right:0;
         width: 18em;
@@ -73,7 +77,7 @@ h2 {
     .graphview {
         background-color: #333333;
         position: absolute;
-        top:4em;
+        top: 3.5em;
         bottom:0;
         left:0;
         right:0;
