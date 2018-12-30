@@ -308,13 +308,19 @@ class myHandler(BaseHTTPRequestHandler):
             path = data["getnodes"] + ".nodes.json"
         if "getsrc" in data:
             node = data["getsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
-            path = GPM_HOME + "/" + node
+            if node.split("/")[1] in ["stdlib", "extlib"]:
+                path = GPM_HOME + "/" + node
+            else:
+                path = "/".join(node.split("/")[1:])
             print(path)
         if "setsrc" in data:
             node = data["setsrc"].replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
-            path = GPM_HOME + "/" + node
+            if node.split("/")[1] in ["stdlib", "extlib"]:
+                path = GPM_HOME + "/" + node
+            else:
+                path = "/".join(node.split("/")[1:])
             print(os.path.dirname(path))
-            if not os.path.exists(os.path.dirname(path)):
+            if not os.path.exists(os.path.dirname(path)) and len(path.replace("\\", "/").split("/")) > 1:
                 try:
                     os.makedirs(os.path.dirname(path))
                 except OSError as exc: # Guard against race condition

@@ -314,7 +314,11 @@ function WebUI_CWebUI() {
 
 				that.nodes.forEach(function(node) {
                     var nodetype = "algorithmnode";
-                    var nodepackage = node.code.split(".")[1];
+                    var tmp = node.code.split(".");
+                    var nodepackage = tmp[tmp.length - 2];
+                    if (tmp.length < 2) {
+                        nodepackage = ". (local)";
+                    }
                     if (Object.keys(node.inputs).length == 0) {
                         nodetype = "inputnode";
                     } else if (Object.keys(node.outputs).length == 0) {

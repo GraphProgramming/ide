@@ -634,8 +634,12 @@ function WebUI_CRenderEngine() {
         
         var fillStyle = colorConnector;
         var foregroundColor = "white";
-        var fillStyleLarge = colorAlgorithmNode;
-		var nodePackage = node.code.split(".")[1];
+		var fillStyleLarge = colorAlgorithmNode;
+		var tmp = node.code.split(".");
+		var nodePackage = tmp[tmp.length - 2];
+		if (tmp.length < 2) {
+			nodePackage = ". (local)";
+		}
         if (Object.keys(node.inputs).length == 0) {
             fillStyleLarge = colorInputNode;
         } else if (Object.keys(node.outputs).length == 0) {
