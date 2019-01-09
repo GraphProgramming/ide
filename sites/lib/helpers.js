@@ -1,18 +1,14 @@
 onerror = handleErr;
 
 function handleErr(msg, url, l) {
-
-var txt = "There was an error on this page.\n\n";
-txt += "Error: " + msg + "\n";
-txt += "URL: " + url + "\n";
-txt += "Line: " + l + "\n\n";
-txt += "Reload site?\n";
-
-if (confirm(txt)){
-  
-}
-
-return true;
+    var txt = "There was an error on this page.\n\n";
+    txt += "Error: " + msg + "\n";
+    txt += "URL: " + url + "\n";
+    txt += "Line: " + l + "\n\n";
+    txt += "Reload site?\n";
+    if (confirm(txt)){
+    }
+    return true;
 }
 
 
@@ -27,6 +23,30 @@ function attachEvent(obj, event, callback) {
 		obj.attachEvent('on' + event, callback);
 	else
 		obj['on' + event] = callback;
+}
+
+function connect_server(host, username, password) {
+    server_url = host;
+    servers[host] = [username, password];
+    localStorage.servers = JSON.stringify(servers);
+    var hostname = host;
+    var port = 12345;
+    if (host.includes(":")) {
+      var tmp = hostname.split(":");
+      hostname = tmp[0];
+      port = parseInt(tmp[1]);
+    }
+    remote_entanglement(hostname, port, username, password, on_entangle, WebUI.printError, host);
+}
+
+function on_entangle(conn, host) {
+    entanglement = conn;
+  
+    /*function updateServerStatus(status) {
+      serverStates[host] = status;
+      updateServerList();
+    }
+    entanglement.set("update_server_status", updateServerStatus);*/
 }
 
 function getSrc(nodeCode, callback, callbackFailure) {

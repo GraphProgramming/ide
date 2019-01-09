@@ -102,9 +102,13 @@ function WebUI_CWebUI() {
 	};
 
 	this.printError = function(text) {
-        document.getElementById("erroroverlay").style.display = "";
-        document.getElementById("innererroroverlay").innerHTML = '<h2>An Error Occured</h2>' + text;
-		console.log(text);
+        if (entanglement == null || text in servers) {
+            that.showLoginDialog();
+        } else {
+            document.getElementById("erroroverlay").style.display = "";
+            document.getElementById("innererroroverlay").innerHTML = '<h2>An Error Occured</h2>' + text;
+            console.log(text);
+        }
 	};
     
 	this.printErrorTitled = function(title, text) {
@@ -253,6 +257,34 @@ function WebUI_CWebUI() {
     
     this.hideErrorOverlay = function() {
         document.getElementById("erroroverlay").style.display = "none";
+    };
+
+    this.showLoginDialog = function() {
+        document.getElementById("loginoverlay").style.display = "";
+        var content = "";
+        for (var server in servers) {
+            content += "<option value='" + server + "'>" + server + "</option>";
+        }
+        document.getElementById("select_server_url").innerHTML = content;
+    };
+
+    this.hideLoginOverlay = function() {
+        document.getElementById("loginoverlay").style.display = "none";
+    };
+
+    this.connectServer = function() {
+        var url = document.getElementById("add_server_url").value;
+        var username = document.getElementById("add_server_username").value;
+        var password = document.getElementById("add_server_password").value;
+
+        connect_server(url, username, password);
+        that.hideLoginOverlay();
+    };
+
+    this.selectServer = function() {
+        var url = document.getElementById("select_server_url").value;
+        connect_server(url, servers[url][0], servers[url][1]);
+        that.hideLoginOverlay();
     };
     
     this.hideCodeEditor = function() {

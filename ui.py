@@ -9,7 +9,10 @@ folder = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 
 def main():
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
-    cef.Initialize()
+    settings = {
+        "cache_path": ".cache"
+    }
+    cef.Initialize(settings)
     cef.CreateBrowserSync(url='file:///'+ folder + '/sites/index.html',
                           window_title="Graph Programming IDE")
     cef.MessageLoop()

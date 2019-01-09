@@ -7,6 +7,13 @@ body {
 .content-div {
 }
 
+.pane {
+    margin: 0.2em;
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid gray;
+}
+
 .navbar-brand {
     margin-bottom: 0px;
 }
@@ -103,10 +110,8 @@ h2 {
         left: 0;
         right: 0;
         overflow:auto;
-        margin-left:2em;
-        margin-right:2em;
-        margin-top:2em;
-        margin-bottom:2em;
+        padding: 5%;
+        margin: 5%;
         z-index: 101;
         color: white;
         background-color: #333333;
@@ -220,7 +225,9 @@ h2 {
         border-color: #D75813;
         border-style: solid;
         width: 100%;
-        padding-top: 0.4em;
+        padding: 0.4em;
+        margin-top:0.5em;
+        margin-bottom:0.5em;
     }
     .hinput {
         background-color: #444444;

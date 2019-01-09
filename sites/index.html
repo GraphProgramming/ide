@@ -15,6 +15,8 @@
   
   <script type="text/javascript">
     var server_url = "http://localhost:8088";
+    var servers = {};
+    var entanglement = null;
 
     function swapTheme(theme){
 	    document.getElementById('pagestyle').setAttribute('href', theme + ".css");
@@ -28,6 +30,9 @@
         }
     }
     function initialize() {
+        if(localStorage.servers) {
+          servers = JSON.parse(localStorage.servers);
+        }
         if (localStorage.server_url) {
             server_url = localStorage.server_url;
         }
@@ -93,6 +98,7 @@
                <li><a id="dev_btn" onclick="toggleDev();">Toggle Dev Mode</a></li>
              </ul>
            </li>
+           <li><a onclick='WebUI.showLoginDialog()'>Switch Server</a></li>
            <li><a id="startbtn" class='inputnode' onclick='WebUI.startDebug()'>RUN</a></li>
            <li><a id="deploybtn" class='inputnode' style="display:none" onclick='WebUI.startDebug()'>DEPLOY</a></li>
            <li><a id="restartbtn" class='algorithmnode' style="display:none" onclick='WebUI.restartDebug()'>RESTART</a></li>
@@ -144,11 +150,31 @@
         </div>
      </div>
      <div id="erroroverlay" style="display:none" class="overlay" onclick="WebUI.hideErrorOverlay()">
-        <div id="innererroroverlay" class="inneroverlay" onclick="event.cancelBubble=true;">
+      <div id="innererroroverlay" class="inneroverlay" onclick="event.cancelBubble=true;">
             An error occured.
         </div>
-     </div>
-     </div>
+    </div>
+    <div id="loginoverlay" style="display:none" class="overlay">
+      <div id="innerloginoverlay" class="inneroverlay" onclick="event.cancelBubble=true;">
+          <h2>Connect to a server</h2>
+          <div class="pane" style="padding-bottom: 5em">
+            Select a known server:
+            <select class="pinput" id="select_server_url">
+            </select>
+            <button class='node inputnode right' onclick='WebUI.selectServer()'>Connect</button>
+          </div>
+          <div class="pane" style="padding-bottom: 5em">
+            <p>Add a server to your local list of servers (in localStorage).</p>
+            <input class="pinput" id="add_server_url" type="text" placeholder="localhost (server)" />
+            <input class="pinput" id="add_server_username" type="text" placeholder="username" />
+            <input class="pinput" id="add_server_password" type="password" placeholder="password" />
+            <p>This server and login information is only stored on your local webbrowser. Information will be only exchanged between your broser and the server you add (no third party).</p>
+
+            <button class='node inputnode right' onclick='WebUI.connectServer()'>Add</button>
+          </div>
+      </div>
+    </div>
+  </div>
  </body>
  <!-- Insert this line above script imports  -->
  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -157,6 +183,7 @@
  <script type="text/javascript" src="lib/codemirror-5.13.2/lib/codemirror.js"></script>
  <script type="text/javascript" src="lib/codemirror-5.13.2/mode/python/python.js"></script>
  <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+ <script type="text/javascript" src="lib/entangle.js"></script>
  <script type="text/javascript" src="lib/helpers.js"></script>
  <script type="text/javascript" src="lib/vars.js"></script>
  <script type="text/javascript" src="lib/CDebugger.js"></script>

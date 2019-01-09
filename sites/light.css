@@ -6,6 +6,13 @@ body {
 .content-div {
 }
 
+.pane {
+    margin: 0.2em;
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid gray;
+}
+
 .navbar-brand {
     margin-bottom: 0px;
 }
@@ -100,10 +107,8 @@ h2 {
         left: 0;
         right: 0;
         overflow:auto;
-        margin-left:2em;
-        margin-right:2em;
-        margin-top:2em;
-        margin-bottom:2em;
+        padding: 5%;
+        margin: 5%;
         z-index: 101;
         background-color: rgba(255, 255, 255, 1.0)
     }
