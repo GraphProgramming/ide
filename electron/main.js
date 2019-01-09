@@ -3,49 +3,34 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
-const spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
-var sleep = require('sleep');
-
-var ls = null
+const path = require('path');
+const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-function startEditorServer() {
-  ls = spawn('../graphedit.sh');
-
-  ls.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  ls.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-  });
-
-  ls.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
-  sleep.sleep(1)
-}
-
 function createWindow () {
-  startEditorServer();
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // Hide menu
-  mainWindow.setMenu(null);
+  mainWindow.setMenu(null)
 
   // Maximize the window
-  mainWindow.maximize();
-  
-  // and load the index.html of the app.
-  mainWindow.loadURL("http://127.0.0.1:8088")
+  mainWindow.maximize()
+  console.log(__dirname)
 
+  // and load the index.html of the app.
+  //mainWindow.loadURL("file://" + __dirname  + "/../sites/index.html")
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, '..', 'sites', 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -54,7 +39,6 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
     console.log("Closed window")
-    exec('ps -ef | grep "python editorserver.py" | awk \'{print $2}\' | xargs kill');
   })
 }
 

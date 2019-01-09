@@ -7,15 +7,17 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   
-  <link rel="stylesheet" href="###REPLACE###css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   
-  <link rel="stylesheet" href="###REPLACE###lib/codemirror-5.13.2/lib/codemirror.css">
-  <link rel="stylesheet" href="###REPLACE###lib/codemirror-5.13.2/theme/lesser-dark.css">
-  <link id="pagestyle" rel="stylesheet" type="text/css" href="###REPLACE###light.css">
+  <link rel="stylesheet" href="lib/codemirror-5.13.2/lib/codemirror.css">
+  <link rel="stylesheet" href="lib/codemirror-5.13.2/theme/lesser-dark.css">
+  <link id="pagestyle" rel="stylesheet" type="text/css" href="light.css">
   
   <script type="text/javascript">
+    var server_url = "http://localhost:8088";
+
     function swapTheme(theme){
-	    document.getElementById('pagestyle').setAttribute('href', "###REPLACE###" + theme + ".css");
+	    document.getElementById('pagestyle').setAttribute('href', theme + ".css");
         WebUI.setTheme(theme);
         localStorage.theme = theme;
         if (theme == "dark") {
@@ -26,6 +28,9 @@
         }
     }
     function initialize() {
+        if (localStorage.server_url) {
+            server_url = localStorage.server_url;
+        }
         if (localStorage.graph) {
             WebUI.start(false, 'graphview', localStorage.graph);
         } else {
@@ -148,16 +153,16 @@
  <!-- Insert this line above script imports  -->
  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
- <script type="text/javascript" src="###REPLACE###lib/jquery.min.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/codemirror-5.13.2/lib/codemirror.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/codemirror-5.13.2/mode/python/python.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/bootstrap.min.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/helpers.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/vars.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/CDebugger.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/CRenderEngine.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/CKeyListener.js"></script>
- <script type="text/javascript" src="###REPLACE###lib/CWebUI.js"></script>
+ <script type="text/javascript" src="lib/jquery.min.js"></script>
+ <script type="text/javascript" src="lib/codemirror-5.13.2/lib/codemirror.js"></script>
+ <script type="text/javascript" src="lib/codemirror-5.13.2/mode/python/python.js"></script>
+ <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+ <script type="text/javascript" src="lib/helpers.js"></script>
+ <script type="text/javascript" src="lib/vars.js"></script>
+ <script type="text/javascript" src="lib/CDebugger.js"></script>
+ <script type="text/javascript" src="lib/CRenderEngine.js"></script>
+ <script type="text/javascript" src="lib/CKeyListener.js"></script>
+ <script type="text/javascript" src="lib/CWebUI.js"></script>
 
  <!-- Insert this line after script imports -->
  <script>if (window.module) module = window.module;</script>

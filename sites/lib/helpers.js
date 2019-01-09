@@ -84,7 +84,7 @@ function sendViaPost(params, callback, callbackFailure) {
             }
         }
     }
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -111,7 +111,7 @@ function sendViaPostRaw(params, callback, callbackFailure) {
             }
         }
     }
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -138,13 +138,13 @@ function execute(graph, callback, callbackFailure) {
         }
     }
     var params = "execGraph=" + graph;
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
 }
 
-function start(graph, language, callback, callbackFailure, callbackError) {
+function start(graph, language, passwd, callback, callbackFailure, callbackError) {
     var xmlhttp;
     if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
@@ -167,8 +167,8 @@ function start(graph, language, callback, callbackFailure, callbackError) {
             return;
         }
     }
-    var params = "startGraph=" + graph + "&execEnv=" + language;
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    var params = "startGraph=" + graph + "&execEnv=" + language + "&passwd=" + passwd;
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -195,7 +195,7 @@ function update(graph, callback, callbackFailure, callbackError) {
         }
     }
     var params = "updateGraph=" + graph;
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -220,7 +220,7 @@ function kill() {
         }
     }
     var params = "killGraph=" + true;
-    xmlhttp.open("POST", "###REPLACE###api",true);
+    xmlhttp.open("POST", server_url + "/api",true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -247,6 +247,6 @@ function sendViaGet(params, callback, callbackFailure) {
             }
         }
     }
-    xmlhttp.open("POST", "###REPLACE###api?"+params,true);
+    xmlhttp.open("POST", server_url + "/api?"+params,true);
     xmlhttp.send();
 }

@@ -894,13 +894,14 @@ return myNode
     
     this.startDebug = function(forceSave) {
         var startup = function() {
+            var passwd = "wasd"; // TODO generate randomly
             that.graphRunning = true;
             document.getElementById("killbtn").style.display = "inline-block";
             document.getElementById("restartbtn").style.display = "inline-block";
             document.getElementById("startbtn").style.display = "none";
             that.setDebug("Started Graph: " + that.graphName);
-	        start(that.graphName, that.currentLanguage, that.setDebug, that.setDebug, that.killDebug);
-            that.debugger = new CDebugger(location.host.split(":")[0], "wasd", that, RenderEngine);
+	        start(that.graphName, that.currentLanguage, passwd, that.setDebug, that.setDebug, that.killDebug);
+            that.debugger = new CDebugger(server_url, passwd, that, RenderEngine);
         };
         
         RenderEngine.resetHeat();

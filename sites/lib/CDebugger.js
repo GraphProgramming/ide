@@ -1,6 +1,10 @@
 function CDebugger(url, passwd, ui, renderer) {
     var that = this;
-    var ws = new WebSocket("ws://"+url+":23352");
+    var splitIdx = 0;
+    if (url.startsWith("http")) {
+        splitIdx = 1;
+    }
+    var ws = new WebSocket("ws://" + url.split(":")[splitIdx] + ":23352");
     
     ws.onopen = function() {
         ws.send(passwd);
