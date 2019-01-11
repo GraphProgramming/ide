@@ -1,18 +1,9 @@
-function CDebugger(url, passwd, ui, renderer) {
+function CDebugger(entanglement, ui, renderer) {
     var that = this;
-    var splitIdx = 0;
-    if (url.startsWith("http")) {
-        splitIdx = 1;
-    }
-    var ws = new WebSocket("ws://" + url.split(":")[splitIdx] + ":23352");
     
-    ws.onopen = function() {
-        ws.send(passwd);
-    }
-    
-    ws.onmessage = function(data) {
-        if(data.data != "") {
-            var d = data.data.split(":");
+    this.onDebugMsg = function(line) {
+        if(line != "") {
+            var d = line.split(":");
             var node = d[0].split("_")[1];
             var data_type = d[1];
             var data_data = "";
@@ -58,22 +49,14 @@ function CDebugger(url, passwd, ui, renderer) {
                     renderer.setDirty();
                 }
             } else {
-                console.log(data.data);
+                console.log(line);
                 console.log(data_type);
                 console.log(data_data);
             }
         }
     };
     
-    ws.onclose = function() {
-        console.log("Closed connection.");
-    }
-    
     this.continueBreakpoint = function(node_name) {
-        ws.send("continue_"+node_name)
+        entanglement.remote_fun("debug")("continue_"+node_name);
     };
-    
-    this.close = function() {
-        ws.close();
-    }
 }

@@ -52,11 +52,19 @@ function WebUI_CWebUI() {
 		KeyListener.launch(RenderEngine);
 
         RenderEngine.setHasParent(false);
-		getGraph(that.graphName, that.setGraph, that.printError);
-		getNodes(that.currentLanguage, that.setNodes, that.printError);
-        showInfo();
 		return true;
-	};
+    };
+    
+    this.connected = function() {
+        if (entanglement != null) {
+            getGraph(that.graphName, that.setGraph);
+            getNodes(that.currentLanguage, that.setNodes);
+            showInfo();
+
+            WebUI.debugger = new CDebugger(entanglement, that, RenderEngine);
+            entanglement.set("on_debug_msg", WebUI.debugger.onDebugMsg);
+        }
+    };
     
     this.setTheme = function(theme) {
         that.theme = theme;
@@ -70,6 +78,11 @@ function WebUI_CWebUI() {
     }
 
 	this.setGraph = function(graph) {
+        if (graph == null) {
+            that.printError("Graph could not be loaded.");
+            return;
+        }
+        graph = JSON.parse(graph);
         that.graphStack.push(graph);
         that.graphNameStack.push(that.graphName);
 		that.graph = graph;
@@ -82,7 +95,11 @@ function WebUI_CWebUI() {
 	};
 
 	this.setNodes = function(nodes) {
-		that.nodes = nodes;
+        if (nodes == null) {
+            that.printError("Could not read list of nodes.");
+            return;
+        }
+		that.nodes = JSON.parse(nodes);
         var compare = function (a,b) {
             if (a.name < b.name)
                 return -1;
@@ -94,11 +111,13 @@ function WebUI_CWebUI() {
 	};
 
 	this.saveGraph = function(name) {
-		setGraph(name, that.graph, that.savedGraph, that.printError);
+		setGraph(name, that.graph, that.savedGraph);
 	};
 
 	this.savedGraph = function(success) {
-		console.log(success);
+        if (success == null) {
+            that.printError("Could not save the graph.");
+        }
 	};
 
 	this.printError = function(text) {
@@ -126,6 +145,10 @@ function WebUI_CWebUI() {
     }
     
     this.openGraph = function(graphs) {
+        if (graphs == null) {
+            that.printError("Could not get a list of the graphs.");
+            return;
+        }
         var classes = {};
 		graphs.forEach(function(graph) {
 		    graph = graph.substring(2, graph.length - 11);
@@ -173,7 +196,7 @@ function WebUI_CWebUI() {
         that.graphStack = new Array();
         that.graphNameStack = new Array();
         RenderEngine.setHasParent(false);
-		getGraph(WebUI.graphName, WebUI.setGraph, WebUI.printError);
+		getGraph(WebUI.graphName, WebUI.setGraph);
 		that.hideGraphSelector();
     }
 
@@ -248,8 +271,10 @@ function WebUI_CWebUI() {
     this.changeLanguage = function(language) {
         that.currentLanguage = language;
         localStorage.currentLanguage = language;
-        document.getElementById("current_language").innerHTML = language;
-        getNodes(language, that.setNodes, WebUI.printError);
+        if (document.getElementById("current_language")) {
+            document.getElementById("current_language").innerHTML = language;
+        }
+        getNodes(language, that.setNodes);
     };
     this.hideLanguageSelector = function() {
         document.getElementById("languageselector").style.display = "none";
@@ -260,6 +285,10 @@ function WebUI_CWebUI() {
     };
 
     this.showLoginDialog = function() {
+        if (entanglement != null) {
+            entanglement.close();
+            entanglement = null;
+        }
         document.getElementById("loginoverlay").style.display = "";
         var content = "";
         for (var server in servers) {
@@ -292,7 +321,7 @@ function WebUI_CWebUI() {
     };
 
     this.loadBtn = function() {
-        listGraphs(that.openGraph, that.printError);
+        listGraphs(that.openGraph);
     };
 
     this.saveBtn = function() {
@@ -546,20 +575,26 @@ return myNode
         nodeCode = document.getElementById("nodeCode").value;
         src = document.getElementById("src").value;
         var fileending = ".py";
-	var packageName = "pyGP";
+	    var packageName = "pyGP";
         if (that.currentLanguage == "luaGP") {
-          fileending = ".lua";
-	  packageName = "luaGP";
+            fileending = ".lua";
+	        packageName = "luaGP";
         }
-        setSrc(packageName + "/" + nodeCode + fileending, src, that.printError);
-        WebUI.hideCodeEditor();
+        setSrc(packageName + "/" + nodeCode + fileending, src, that.onSaved);
     }
     
     this.saveCodePeek = function(property) {
         codeMirror.toTextArea();
         src = document.getElementById("src").value;
-        setSrc(property, src, that.printError);
-        WebUI.hideCodeEditor();
+        setSrc(property, src, that.onSaved);
+    }
+
+    this.onSaved = function(graph) {
+        if (graph != null) {
+            WebUI.hideCodeEditor();
+        } else {
+            that.printError("Cannot save the file.");
+        }
     }
     
     this.codeEdit = function(property) {
@@ -576,10 +611,15 @@ return myNode
         codeMirror = CodeMirror.fromTextArea(document.getElementById("src"), {lineNumbers: true, theme: codeTheme});
     }
     
-    function showCode(src) {
+    this.showCode = function(src) {
+        if (src == null) {
+            WebUI.hideCodeEditor();
+            that.printError("Sourcecode not found!");
+            return;
+        }
         var srcEdit = "<textarea id='src' class='src'>" + src + "</textarea>";
         var fileending = ".py";
-	var packageName = "pyGP";
+	    var packageName = "pyGP";
         if (that.currentLanguage == "luaGP") {
             fileending = ".lua";
 	    packageName = "luaGP";
@@ -595,19 +635,19 @@ return myNode
         document.getElementById("codeeditor").style.display = "";
         document.getElementById("innercodeeditor").innerHTML = '<h2>' + that.currentNode.code + '</h2>' + srcEdit + cancelbtn + savebtn;
         codeMirror = CodeMirror.fromTextArea(document.getElementById("src"), {lineNumbers: true, theme: codeTheme});
-    }
+    };
     
     
     this.codePeek = function(property) {
         var fileending = ".py";
-	var packageName = "pyGP";
+	    var packageName = "pyGP";
         if (that.currentLanguage == "luaGP") {
             fileending = ".lua";
 	    packageName = "luaGP";
         }
         var code = packageName + "." + property + fileending;
-        showCode("Downloading code: " + code);
-        getSrc(code, showCode, that.printError);
+        that.showCode("Downloading code: " + code);
+        getSrc(code, that.showCode);
     }
 
 	function tryFindInput(node, x, y) {
@@ -777,7 +817,7 @@ return myNode
                     html += "</p>"
                 }
                 if(that.currentNode.code == "system.subgraph") {
-				    html += "<p><button class='node algorithmnode right' onclick='getGraph(\"" + that.currentNode.args + "\", WebUI.setGraph, WebUI.printError)'>Edit Subgraph</button><p>";
+				    html += "<p><button class='node algorithmnode right' onclick='getGraph(\"" + that.currentNode.args + "\", WebUI.setGraph)'>Edit Subgraph</button><p>";
                 }
                 html += "<p style='padding-top:1em'><button class='button inputnode' onclick='WebUI.nodeChanged()'>Save</button>";
                 html += "<button class='button outputnode' onclick='WebUI.deselectNode()'>Unselect</button></p>";
@@ -902,7 +942,6 @@ return myNode
     
     this.killDebug = function() {
         kill();
-        that.debugger.close();
         document.getElementById("killbtn").style.display = "none";
         document.getElementById("restartbtn").style.display = "none";
         document.getElementById("startbtn").style.display = "inline-block";
@@ -932,8 +971,7 @@ return myNode
             document.getElementById("restartbtn").style.display = "inline-block";
             document.getElementById("startbtn").style.display = "none";
             that.setDebug("Started Graph: " + that.graphName);
-	        start(that.graphName, that.currentLanguage, passwd, that.setDebug, that.setDebug, that.killDebug);
-            that.debugger = new CDebugger(server_url, passwd, that, RenderEngine);
+	        start(that.graphName, that.currentLanguage, that.printError);
         };
         
         RenderEngine.resetHeat();

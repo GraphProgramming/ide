@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <title>GraphEditor</title>
+  <title>GraphIDE</title>
   <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   
   <link rel="stylesheet" href="css/bootstrap.min.css">
   
@@ -68,12 +69,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
          </button>
-         <p class="navbar-brand">Graph Programming</p>
+         <p class="navbar-brand">Graph IDE</p>
        </div>
        <div id="navbar" data-role="panel" data-position="left" data-display="overlay" data-theme="b" class="menu navbar-collapse collapse right">
          <ul class="nav navbar-nav">
            <li class="dropdown">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Graph: <span id="current_graph">Default</span><span class="caret"></span></a>
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Graph<span class="caret"></span></a>
              <ul class="dropdown-menu">
                <li><a id="load_btn" onclick="WebUI.loadBtn();">LOAD</a></li>
                <li><a id="save_btn" onclick="WebUI.saveBtn();">SAVE</a></li>
@@ -87,7 +88,7 @@
              </ul>
            </li>
            <li class="dropdown">
-		   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language: <span id="current_language">Julia</span><span class="caret"></span></a>
+		   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language<span class="caret"></span></a>
              <ul class="dropdown-menu">
                <li><a id="julia_btn" onclick="WebUI.changeLanguage('juliaGP');">Julia (WIP)</a></li>
                <li><a id="python_btn" onclick="WebUI.changeLanguage('pyGP');">Python</a></li>
@@ -124,7 +125,7 @@
          </div>
          <div id="debug" class="tab">
             <h2>Debug</h2>
-            <div id="debugcontent" class="debug">
+            <div id="debugcontent" class="debug" entanglement="console">
                 Run graph to get debug output.
             </div>
          </div>

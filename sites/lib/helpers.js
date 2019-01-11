@@ -41,232 +41,78 @@ function connect_server(host, username, password) {
 
 function on_entangle(conn, host) {
     entanglement = conn;
-  
-    /*function updateServerStatus(status) {
-      serverStates[host] = status;
-      updateServerList();
-    }
-    entanglement.set("update_server_status", updateServerStatus);*/
+    server_url = host;
+    window.setTimeout(WebUI.connected, 1000);
 }
 
-function getSrc(nodeCode, callback, callbackFailure) {
-    var params = "getsrc=" + encodeURIComponent(nodeCode);
-    sendViaPostRaw(params, callback, callbackFailure)
-}
-
-function setSrc(nodeCode, src, callbackFailure) {
-    var params = "setsrc=" + encodeURIComponent(nodeCode) + "&value=" + encodeURIComponent(src);
-    sendViaPostRaw(params, function(e) {}, callbackFailure)
-}
-
-function getGraph(graph, callback, callbackFailure) {
-    var params = "getgraph=" + graph;
-    sendViaPost(params, callback, callbackFailure)
-}
-
-function listGraphs(callback, callbackFailure) {
-    var params = "listGraphs=" + true;
-    sendViaPost(params, callback, callbackFailure)
-}
-
-function getNodes(graph, callback, callbackFailure) {
-    var params = "getnodes=" + graph;
-    sendViaPost(params, callback, callbackFailure)
-}
-
-function setGraph(graph, data, callback, callbackFailure) {
-    var params = "setgraph=" + encodeURIComponent(graph) + "&value=" + encodeURIComponent(JSON.stringify(data, null, "\t"));
-    sendViaPost(params, callback, callbackFailure)
-}
-
-function sendViaPost(params, callback, callbackFailure) {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+function getSrc(nodeCode, callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.set("on_get_src", callback);
+        entanglement.remote_fun("get_src")(nodeCode);
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            if (xmlhttp.responseText != "") {
-                if (callback != null) {
-                    try{
-                        var inobject = JSON.parse(xmlhttp.responseText);
-                        callback(inobject);
-                    } catch (err) {
-                        console.log(xmlhttp.responseText);
-                    }
-                }
-            }
-        } else if (xmlhttp.readyState==4) {
-            if (callbackFailure != null) {
-                callbackFailure(xmlhttp.responseText);
-            }
-        }
-    }
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
 }
 
-function sendViaPostRaw(params, callback, callbackFailure) {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+function setSrc(nodeCode, src, callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.set("on_set_src", callback);
+        entanglement.remote_fun("set_src")(nodeCode, src);
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            if (xmlhttp.responseText != "") {
-                if (callback != null) {
-                    var inobject = xmlhttp.responseText;
-                    callback(inobject);
-                }
-            }
-        } else if (xmlhttp.readyState==4) {
-            if (callbackFailure != null) {
-                callbackFailure(xmlhttp.responseText);
-            }
-        }
-    }
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
 }
 
-function execute(graph, callback, callbackFailure) {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+function getGraph(graph, callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.set("on_get_graph", callback);
+        entanglement.remote_fun("get_graph")(graph);
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            if (xmlhttp.responseText != "") {
-                if (callback != null) {
-                    callback(xmlhttp.responseText);
-                }
-            }
-        } else if (xmlhttp.readyState==4) {
-            if (callbackFailure != null) {
-                callbackFailure(xmlhttp.responseText);
-            }
-        }
-    }
-    var params = "execGraph=" + graph;
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
 }
 
-function start(graph, language, passwd, callback, callbackFailure, callbackError) {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+function listGraphs(callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.set("on_list_graphs", callback);
+        entanglement.remote_fun("list_graphs")();
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            update(graph, callback, callbackFailure, callbackError);
-            if (callback != null) {
-                callback(xmlhttp.responseText);
-            }
-        } else if (xmlhttp.readyState==4) {
-            if (callbackFailure != null) {
-                callbackFailure(xmlhttp.responseText);
-            }
-        }
-        if (xmlhttp.status === 404) {
-            callbackError();
-            return;
-        }
-    }
-    var params = "startGraph=" + graph + "&execEnv=" + language + "&passwd=" + passwd;
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
 }
 
-function update(graph, callback, callbackFailure, callbackError) {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+function getNodes(language, callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.set("on_get_nodes", callback);
+        entanglement.remote_fun("get_nodes")(language);
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            setTimeout(function() { update(graph, callback, callbackFailure, callbackError); }, 200);
-            if (callback != null) {
-                callback(xmlhttp.responseText);
-            }
-        } else if (xmlhttp.readyState==4) {
-        }
-        if (xmlhttp.status === 404) {
-            callbackError();
-            return;
-        }
+}
+
+function setGraph(graph, data, callback) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
+    } else {
+        entanglement.set("on_set_graph", callback);
+        entanglement.remote_fun("set_graph")(graph, JSON.stringify(data, null, "\t"));
     }
-    var params = "updateGraph=" + graph;
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
+}
+
+function start(graph, language, error) {
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
+    } else {
+        entanglement.set("on_start", error);
+        entanglement.set("on_kill", WebUI.killDebug);
+        entanglement.remote_fun("start")(graph, language);
+    }
 }
 
 function kill() {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
+    if (entanglement == null) {
+        WebUI.showLoginDialog();
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        entanglement.remote_fun("kill")();
     }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            if (xmlhttp.responseText != "") {
-                if (callback != null) {
-                    console.log(xmlhttp.responseText);
-                }
-            }
-        } else if (xmlhttp.readyState==4) {
-            console.log(xmlhttp.responseText);
-        }
-    }
-    var params = "killGraph=" + true;
-    xmlhttp.open("POST", server_url + "/api",true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-function sendViaGet(params, callback, callbackFailure) {
-	var xmlhttp;
-    if (window.XMLHttpRequest) {
-    	xmlhttp = new XMLHttpRequest();
-    } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function() {
-    	if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            if (xmlhttp.responseText != "") {
-                if (callback != null) {
-                    var inobject = JSON.parse(xmlhttp.responseText);
-                    callback(inobject);
-                }
-            }
-        } else if (xmlhttp.readyState==4) {
-            if (callbackFailure != null) {
-                callbackFailure(xmlhttp.responseText);
-            }
-        }
-    }
-    xmlhttp.open("POST", server_url + "/api?"+params,true);
-    xmlhttp.send();
 }
