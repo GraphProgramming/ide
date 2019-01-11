@@ -6,15 +6,18 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+	<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   
   <link rel="stylesheet" href="css/bootstrap.min.css">
   
-  <link rel="stylesheet" href="lib/codemirror-5.13.2/lib/codemirror.css">
-  <link rel="stylesheet" href="lib/codemirror-5.13.2/theme/lesser-dark.css">
+  <!--<link rel="stylesheet" href="lib/codemirror-5.13.2/lib/codemirror.css">
+  <link rel="stylesheet" href="lib/codemirror-5.13.2/theme/lesser-dark.css">-->
   <link id="pagestyle" rel="stylesheet" type="text/css" href="light.css">
   
   <script type="text/javascript">
+    var editor = null;
     var server_url = "http://localhost:8088";
     var servers = {};
     var entanglement = null;
@@ -141,9 +144,15 @@
         </div>
      </div>
      <div id="codeeditor" style="display:none" class="overlay">
-        <div id="innercodeeditor" class="inneroverlay" onclick="event.cancelBubble=true;">
-         <!-- Nodes that can be created -->
+      <div id="innercodeeditor" class="inneroverlay" onclick="event.cancelBubble=true;">
+        <h2>
+            <input class="hinput" id="nodeCode" value="package.node" />
+        </h2>
+        <div id="editor">
         </div>
+        <button class="node outputnode right" onclick="WebUI.hideCodeEditor()">Cancel</button>
+        <button class="node inputnode right" onclick="WebUI.saveCodePeek()">Save</button>
+      </div>
      </div>
      <div id="prompt" style="display:none" class="overlay" onclick="WebUI.cancelPrompt()">
         <div id="innerprompt" class="inneroverlay" onclick="event.cancelBubble=true;">
@@ -181,8 +190,14 @@
  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
  <script type="text/javascript" src="lib/jquery.min.js"></script>
- <script type="text/javascript" src="lib/codemirror-5.13.2/lib/codemirror.js"></script>
- <script type="text/javascript" src="lib/codemirror-5.13.2/mode/python/python.js"></script>
+
+ <script>var require = { paths: { 'vs': 'node_modules/monaco-editor/min/vs' } };</script>
+ <script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+ <script src="node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+ <script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+
+ <!--<script type="text/javascript" src="lib/codemirror-5.13.2/lib/codemirror.js"></script>
+ <script type="text/javascript" src="lib/codemirror-5.13.2/mode/python/python.js"></script>-->
  <script type="text/javascript" src="lib/bootstrap.min.js"></script>
  <script type="text/javascript" src="lib/entangle.js"></script>
  <script type="text/javascript" src="lib/helpers.js"></script>

@@ -1,4 +1,4 @@
-onerror = handleErr;
+/*onerror = handleErr;
 
 function handleErr(msg, url, l) {
     var txt = "There was an error on this page.\n\n";
@@ -9,7 +9,7 @@ function handleErr(msg, url, l) {
     if (confirm(txt)){
     }
     return true;
-}
+}*/
 
 
 function attachEvent(obj, event, callback) {

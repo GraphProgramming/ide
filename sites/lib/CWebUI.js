@@ -52,7 +52,60 @@ function WebUI_CWebUI() {
 		KeyListener.launch(RenderEngine);
 
         RenderEngine.setHasParent(false);
+          
+        function load() {
+            $(window).bind('keydown', function(event) {
+              event = event || window.event;
+                if (event.ctrlKey || event.metaKey) {
+                    switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case 's':
+                        event.preventDefault();
+                        console.log("TODO Save");
+                        break;
+                case 'r':
+                  event.preventDefault();
+                  console.log("TODO run");
+                  break;
+                    }
+                
+                }
+              if (event.keyCode == 116) {
+                event.preventDefault();
+                console.log("TODO run");
+              }
+            });
+      
+            var editorContainer = document.getElementById("editor");
+            editor = monaco.editor.create(editorContainer, {
+              value: "# This is no real document.\n# \n# It does not exist on your server and only has the purpose \n# to display something when no file is opened!\n",
+              language: "python",
+              theme: "vs-dark"
+            });
+            editor.setModel(null);
+            that.layout();
+        }
+
+        require(['vs/editor/editor.main'], function() {
+            load();
+        });
+
 		return true;
+    };
+
+    this.layout = function() {
+        var editorContainer = document.getElementById("editor");
+        var editorParent = document.getElementById("innercodeeditor");
+
+        var GLOBAL_PADDING = 0;
+    
+        var WIDTH = editorParent.offsetWidth - 2 * GLOBAL_PADDING;
+        var HEIGHT = editorParent.offsetHeight;
+    
+        editorContainer.style.display = "inline-block";
+        editorContainer.style.width = (WIDTH * 0.9 - 20) + 'px';
+        editorContainer.style.height = (HEIGHT * 0.9 - 150) + 'px';
+
+        editor.layout();
     };
     
     this.connected = function() {
@@ -525,8 +578,7 @@ function WebUI_CWebUI() {
     }
     
     this.saveCodeEdit = function (property) {
-        codeMirror.toTextArea();
-        that.currentNode.args[property] = document.getElementById("src").value;
+        that.currentNode.args[property] = editor.getValue();
         that.changed = true;
         RenderEngine.setDirty();
         WebUI.hideCodeEditor();
@@ -561,19 +613,12 @@ end
 return myNode
 `;
         }
-        var srcEdit = "<textarea id='src' class='src'>" + sampleSrc + "</textarea>";
-        var savebtn = "<button class='node inputnode right' onclick='WebUI.saveNewNode()'>Create</button>";
-        var cancelbtn = "<button class='node outputnode right' onclick='WebUI.hideCodeEditor()'>Cancel</button>"
-                
-        document.getElementById("codeeditor").style.display = "";
-        document.getElementById("innercodeeditor").innerHTML = "<h2><input class='hinput' id='nodeCode' value='package.node' /></h2>" + srcEdit + cancelbtn + savebtn;
-        codeMirror = CodeMirror.fromTextArea(document.getElementById("src"), {lineNumbers: true, theme: codeTheme});
+        that.showCode(sampleSrc, "package.name");
     }
     
     this.saveNewNode = function() {
-        codeMirror.toTextArea();
         nodeCode = document.getElementById("nodeCode").value;
-        src = document.getElementById("src").value;
+        src = editor.getValue();
         var fileending = ".py";
 	    var packageName = "pyGP";
         if (that.currentLanguage == "luaGP") {
@@ -583,10 +628,8 @@ return myNode
         setSrc(packageName + "/" + nodeCode + fileending, src, that.onSaved);
     }
     
-    this.saveCodePeek = function(property) {
-        codeMirror.toTextArea();
-        src = document.getElementById("src").value;
-        setSrc(property, src, that.onSaved);
+    this.saveCodePeek = function() {
+        that.saveNewNode();
     }
 
     this.onSaved = function(graph) {
@@ -599,42 +642,34 @@ return myNode
     
     this.codeEdit = function(property) {
         var src = that.currentNode.args[property];
-        
-        var srcEdit = "<textarea id='src' class='src'>" + src + "</textarea>";
-        var savebtn = "<button class='node inputnode right' onclick='WebUI.saveCodeEdit(\""+property+"\")'>Save</button>";
-        var cancelbtn = "<button class='node outputnode right' onclick='WebUI.hideCodeEditor()'>Cancel</button>"
-        
-        var nname = that.currentNode.displayname;
-        
-        document.getElementById("codeeditor").style.display = "";
-        document.getElementById("innercodeeditor").innerHTML = '<h2>' + nname + ".args." + property + '</h2>' + srcEdit + cancelbtn + savebtn;
-        codeMirror = CodeMirror.fromTextArea(document.getElementById("src"), {lineNumbers: true, theme: codeTheme});
+        that.showCode(src);
     }
     
-    this.showCode = function(src) {
+    this.showCode = function(src, name=null) {
         if (src == null) {
             WebUI.hideCodeEditor();
             that.printError("Sourcecode not found!");
             return;
         }
-        var srcEdit = "<textarea id='src' class='src'>" + src + "</textarea>";
         var fileending = ".py";
-	    var packageName = "pyGP";
+        var packageName = "pyGP";
+        var programmingLanguage = "python";
         if (that.currentLanguage == "luaGP") {
             fileending = ".lua";
-	    packageName = "luaGP";
+	        packageName = "luaGP";
+            programmingLanguage = "lua";
         }
-        var savebtn = "<button class='node inputnode right' onclick='WebUI.saveCodePeek(\"" + packageName + "/" + that.currentNode.code + fileending + "\")'>Save</button>";
-        if (localStorage.devmode != "true") {
-            savebtn = "";
+        var code = null;
+        if (name != null) {
+            code = name;
+        } else {
+            code = that.currentNode.code;
         }
-        var cancelbtn = "<button class='node outputnode right' onclick='WebUI.hideCodeEditor()'>Cancel</button>"
-        
-        var nname = that.currentNode.displayname;
-        
+        window.setTimeout(that.layout, 200);
+        var model = monaco.editor.createModel(src, programmingLanguage);
+        editor.setModel(model);
+        document.getElementById("nodeCode").value = code;    
         document.getElementById("codeeditor").style.display = "";
-        document.getElementById("innercodeeditor").innerHTML = '<h2>' + that.currentNode.code + '</h2>' + srcEdit + cancelbtn + savebtn;
-        codeMirror = CodeMirror.fromTextArea(document.getElementById("src"), {lineNumbers: true, theme: codeTheme});
     };
     
     
