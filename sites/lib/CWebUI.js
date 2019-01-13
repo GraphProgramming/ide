@@ -102,8 +102,8 @@ function WebUI_CWebUI() {
         var HEIGHT = editorParent.offsetHeight;
     
         editorContainer.style.display = "inline-block";
-        editorContainer.style.width = (WIDTH * 0.9 - 20) + 'px';
-        editorContainer.style.height = (HEIGHT * 0.9 - 150) + 'px';
+        editorContainer.style.width = (WIDTH - 2) + 'px';
+        editorContainer.style.height = (HEIGHT - 130) + 'px';
 
         editor.layout();
     };

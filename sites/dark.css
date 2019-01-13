@@ -110,8 +110,10 @@ h2 {
         left: 0;
         right: 0;
         overflow:auto;
-        padding: 5%;
+        padding: 2px;
         margin: 5%;
+        margin-top: 1%;
+        margin-bottom: 1%;
         z-index: 101;
         color: white;
         background-color: #333333;
