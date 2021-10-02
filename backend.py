@@ -115,9 +115,11 @@ class Server(object):
         entanglement.kill = partial(self.kill, state, entanglement)
 
     def node_path(self, state, filename):
+        filename, x = filename.split(":")
+        filename += "." + x.split(".")[-1]
         node = filename.replace(".", "/").replace("/lua", ".lua").replace("/py", ".py")
         if node.split("/")[1] in ["stdlib", "extlib"]:
-            path = GPM_HOME + "/" + node
+            path = GPM_HOME.replace("\\", "/") + "/" + node
         else:
             # TODO maybe consider user that is logged in?
             path = "/".join(node.split("/")[1:])
@@ -158,10 +160,13 @@ class Server(object):
         entanglement.remote_fun("on_set_graph")(graph)
 
     def get_nodes(self, state, entanglement, language):
+        print(f"Get Nodes for: {language}")
         try:
-            subprocess.call(["bash", GPM_HOME + "/ide/buildSpec", language])
+            ret = subprocess.check_output(["bash", GPM_HOME + "/ide/buildSpec", language])
+            print(ret.decode("utf-8"))
         except:
-            subprocess.call([GPM_HOME + "/ide/buildSpec.bat", language])
+            ret = subprocess.check_output([os.path.join(GPM_HOME, "ide", "buildSpec.bat"), language])
+            print(ret.decode("utf-8"))
         path = language + ".nodes.json"
         entanglement.remote_fun("on_get_nodes")(try_read(path))
 
@@ -180,10 +185,10 @@ class Server(object):
         else:
             try:
                 preex = os.setsid
-                cmd = ["python -m gpm.pyGP " + cmd + " debug"]
+                cmd = ["python -m gpm.pyGP " + cmd + " --debug"]
             except AttributeError:
                 print("Windows: Feature not availible.")
-                cmd = ["python", "-m", "gpm.pyGP", cmd, "debug"]
+                cmd = ["python", "-m", "gpm.pyGP", cmd, "--debug"]
         self.execProcess = subprocess.Popen(
             cmd,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,

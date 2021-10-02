@@ -18,10 +18,12 @@ def run_server(config_path):
 
     server.running = False
 
+def main(argv):
+    if len(argv) > 1:
+        run_server(argv[1])
+    else:
+        run_server("config/default.json")
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) > 1:
-        run_server(sys.argv[1])
-    else:
-        run_server("config/default.json")
+    main(sys.argv)
